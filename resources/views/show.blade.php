@@ -3,9 +3,16 @@
 @section('content')
 <div class="movie-info border-b border-gray-800">
     <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
-        <div class="flex-none mx-auto">
-            <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'] }}" alt="sonic" class="w-80 lg:w-96">  
-        </div>
+        @if ($movie['poster_path'])
+            <div class="flex-none mx-auto">
+                <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'] }}" alt="sonic" class="w-80 lg:w-96">  
+            </div>            
+        @else
+            <div class="flex-none mx-auto">
+                <img src="https://via.placeholder.com/350x500" alt="sonic" class="w-80 lg:w-96">  
+            </div>           
+        @endif
+
         <div class="mx-auto mt-10 md:ml-24">
             <h2 class="text-4xl font-semibold">{{ $movie['title'] }}</h2>
             <div class="flex flex-wrap items-center text-gray-400 text-sm" >
@@ -53,9 +60,14 @@
             @foreach ($movie['credits']['cast'] as $cast)
             @if ($loop->index < 5)
                 <div class="mt-8">
-                    <a href="#">
-                        <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $cast['profile_path'] }}" alt="actor1" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
-                    </a>
+                    @if ($cast['profile_path'])
+                        <a href="#">
+                            <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $cast['profile_path'] }}" alt="actor1" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
+                        </a>  
+                    @else
+                        <img src="https://via.placeholder.com/190x290" alt="poster" class="">
+                    @endif
+                    
                     <div class="mt-2">
                         <a href="#" class="text-lg mt-2 hover:text-gray:300">{{ $cast['original_name'] }}</a>
                         <div class="text-sm text-gray-400">

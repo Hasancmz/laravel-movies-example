@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Movie App</title>
     <link rel="stylesheet" href="/css/app.css">
+    <livewire:styles />
 </head>
 <body class="font-sans bg-gray-900 text-white">
     <nav class="border-b border-gray-800">
@@ -27,15 +28,11 @@
                 </li>
             </ul>
             <div class="flex flex-col md:flex-row items-center">
-                <div class="relative mt-3 md:mt-0">
-                    <input type="text" class="bg-gray-800 text-sm rounded-full w-64 px-4 pl-8 py-2 focus:outline-none focus:shadow-outline" placeholder="Search..">
-                    <div class="absolute top-0">
-                        <i class="fa fa-search fill-current w-4 text-gray-500 mt-3 ml-2" aria-hidden="true"></i>
-                    </div>
-                </div>
+                <livewire:search-dropdown>
             </div>
         </div>
     </nav>
     @yield('content')
+    <livewire:scripts />
 </body>
 </html>
