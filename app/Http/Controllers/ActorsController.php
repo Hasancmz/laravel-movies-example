@@ -12,17 +12,24 @@ class ActorsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 1)
     {
+
+        abort_if($page > 500, 204); // infinite scroll için yazdık bunu.
+
         $popularActors = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/person/popular')
+            ->get('https://api.themoviedb.org/3/person/popular?page=' . $page)
             ->json()['results'];
 
-        dump($popularActors);
+        //dump($popularActors);
+
+        $previous = $page > 1 ? ($page - 1) : null;
+        $next     = $page < 500 ? ($page + 1) : null;
 
         return view('actors.index', [
             'popularActors' => $popularActors,
-
+            'previous' => $previous,
+            'next' => $next
         ]);
     }
 
@@ -55,7 +62,7 @@ class ActorsController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('actors.show');
     }
 
     /**

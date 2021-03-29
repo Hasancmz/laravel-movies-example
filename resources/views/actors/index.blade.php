@@ -8,17 +8,17 @@
                 @foreach ($popularActors as $actor)
                     <div class="actor mt-8">
                         @if($actor['profile_path'])
-                            <a href="">
+                            <a href="{{ route('actors.show', $actor['id']) }}">
                                 <img src="{{ 'https://image.tmdb.org/t/p/w235_and_h235_face/' . $actor['profile_path'] }}" alt="profile" class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                         @else
-                            <a href="">
-                                <img src="{{ 'https://ui-avatars.com/api7?size235&name=' . $actor['name'] }}" alt="profile" class="hover:opacity-75 transition ease-in-out duration-150">
+                            <a href="{{ route('actors.show', $actor['id']) }}">
+                                <img src="{{ 'https://ui-avatars.com/api/?size=235&name=' . $actor['name'] }}" alt="profile" class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
                         @endif
                         
                         <div class="mt-2">
-                            <a href="" class="block text-lg hover:text-gray-300">{{ $actor['name'] }}</a>
+                            <a href="{{ route('actors.show', $actor['id']) }}" class="block text-lg hover:text-gray-300">{{ $actor['name'] }}</a>
                             @foreach ($actor['known_for'] as $actorMovie)
                             @if ($actorMovie['media_type'] === 'movie')
                                 <div class="text-sm truncate text-gray-400">{{ $actorMovie['title'] }}@if (!$loop->last), @endif</div> 
@@ -31,5 +31,41 @@
                 @endforeach
             </div>    
         </div>
+
+        <div class="page-load-status my-8">
+            <div class="flex justify-center">
+                <p class="infinite-scroll-request spinner my-8 text-4xl">&nbsp;</p>
+                <p class="infinite-scroll-last text-3xl mt-8 text-yellow-700">End of content</p>
+                <p class="infinite-scroll-error">Error</p>
+            </div>
+            
+        </div>
+
+        {{-- <div class="flex justify-around mt-16">
+            @if ($previous)
+                <a href="/actors/page/{{ $previous }}">Previous</a>
+            @else
+                <div></div>            
+            @endif
+            @if ($next)
+                <a href="/actors/page/{{ $next }}">Next</a>
+            @else
+                <div></div>
+            @endif
+        </div> --}}
     </div>
+@endsection
+
+@section('scripts')
+<script src="https://unpkg.com/infinite-scroll@4/dist/infinite-scroll.pkgd.min.js"></script>
+<script>
+    let elem = document.querySelector('.grid');
+    let infScroll = new InfiniteScroll( elem, {
+    // options
+    path: '/actors/page/@{{#}}',
+    append: '.actor',
+    //history: false,
+    status: '.page-load-status'
+    });
+</script>
 @endsection

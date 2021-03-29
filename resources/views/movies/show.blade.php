@@ -97,15 +97,17 @@
             @if ($loop->index < 5)
                 <div class="mt-8">
                     @if ($cast['profile_path'])
-                        <a href="#">
+                        <a href="{{ route('actors.show', $cast['id']) }}">
                             <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $cast['profile_path'] }}" alt="actor1" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
                         </a>  
                     @else
-                        <img src="https://via.placeholder.com/190x290" alt="poster" class="">
+                        <a href="{{ route('actors.show', $cast['id']) }}">
+                            <img src="https://via.placeholder.com/190x290" alt="poster" class="">
+                        </a>
                     @endif
                     
                     <div class="mt-2">
-                        <a href="#" class="text-lg mt-2 hover:text-gray:300">{{ $cast['original_name'] }}</a>
+                        <a href="{{ route('actors.show', $cast['id']) }}" class="text-lg mt-2 hover:text-gray:300">{{ $cast['original_name'] }}</a>
                         <div class="text-sm text-gray-400">
                             {{ $cast['character'] }}
                         </div>
