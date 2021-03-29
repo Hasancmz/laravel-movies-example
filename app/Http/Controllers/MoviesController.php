@@ -35,7 +35,7 @@ class MoviesController extends Controller
 
         //dump($nowPlayingMovies);
 
-        /*return view('index', [
+        /*return view('movies.index', [
             'popularMovies' => $popularMovies,
             'nowPlayingMovies' => $nowPlayingMovies,
             'genres' => $genres,
@@ -49,7 +49,7 @@ class MoviesController extends Controller
             $genres,
         );
 
-        return view('index', $viewModel);
+        return view('movies.index', $viewModel);
     }
 
     /**
@@ -82,13 +82,13 @@ class MoviesController extends Controller
     public function show($id)
     {
         $movie = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images')
+            ->get('https://api.themoviedb.org/3/movie/' . $id . '?append_to_response=credits,videos,images&language=tr')
             ->json();
         // append_to_response=credits,videos,images bu kısımları ekleme yaptık 3 ü birden eklendi.
 
         //dump($movie);
 
-        return view('show', [
+        return view('movies.show', [
             'movie' => $movie,
         ]);
     }
