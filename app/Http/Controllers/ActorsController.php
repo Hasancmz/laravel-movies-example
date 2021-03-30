@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -62,7 +63,29 @@ class ActorsController extends Controller
      */
     public function show($id)
     {
-        return view('actors.show');
+        $actor = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/' . $id . '?append_to_response=&language=tr')
+            ->json();
+
+        $socialMedia = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/' . $id . '/external_ids')
+            ->json();
+
+        $date = Carbon::parse($actor['birthday'])->format('M D, Y');
+        // $dateYear = Carbon::parse($actor['birthday'])->format('Y');
+        // $now = Carbon::parse(now())->format('Y');
+        $age = Carbon::parse($actor['birthday'])->age;
+
+        dump($socialMedia);
+
+
+
+        return view('actors.show', [
+            'actor' => $actor,
+            'age' => $age,
+            'date' => $date,
+            'socialMedia' => $socialMedia,
+        ]);
     }
 
     /**
