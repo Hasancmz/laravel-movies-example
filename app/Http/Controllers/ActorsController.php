@@ -71,13 +71,24 @@ class ActorsController extends Controller
             ->get('https://api.themoviedb.org/3/person/' . $id . '/external_ids')
             ->json();
 
+        $credits = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/person/' . $id . '/combined_credits')
+            ->json();
+
+        $popularMovies = collect($credits)->get('cast');
+        $popularMovies = collect($popularMovies)->where('media_type', 'movie')->sortByDesc('popularity')->take(5);
+        //yukarda popüler olan 5 filmi çektik.
+
+        $starringMovies = collect($credits)->get('cast');
+        $starringMovies = collect($starringMovies)->sortByDesc('release_date');
+
+
         $date = Carbon::parse($actor['birthday'])->format('M D, Y');
         // $dateYear = Carbon::parse($actor['birthday'])->format('Y');
         // $now = Carbon::parse(now())->format('Y');
         $age = Carbon::parse($actor['birthday'])->age;
 
-        dump($socialMedia);
-
+        dump($starringMovies);
 
 
         return view('actors.show', [
@@ -85,6 +96,8 @@ class ActorsController extends Controller
             'age' => $age,
             'date' => $date,
             'socialMedia' => $socialMedia,
+            'popularMovies' => $popularMovies,
+            'starringMovies' => $starringMovies,
         ]);
     }
 
