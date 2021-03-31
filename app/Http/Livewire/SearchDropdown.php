@@ -12,17 +12,27 @@ class SearchDropdown extends Component
     public function render()
     {
         $searchResults = [];
+        $searchMovie = [];
+        $searchTv = [];
 
         if (strlen($this->search) >= 2) {
-            $searchResults = Http::withToken(config('services.tmdb.token'))
+            $searchMovie = Http::withToken(config('services.tmdb.token'))
                 ->get('https://api.themoviedb.org/3/search/movie?query=' . $this->search)
+                ->json()['results'];
+            $searchTv = Http::withToken(config('services.tmdb.token'))
+                ->get('https://api.themoviedb.org/3/search/tv?query=' . $this->search)
                 ->json()['results'];
         }
 
-        // dump($searchResults);
+        $searchResults = array_merge($searchMovie, $searchTv);
+        $searchResults = collect($searchResults)->sortByDesc('popularity')->take(7);
+
+        //Film ve dizi sorgusunu aynı anda yapmak için yaptık bu işlemi search kısmında birazcık yavaşlama oldu
+
+        //dump($searchResults);
 
         return view('livewire.search-dropdown', [
-            'searchResults' => collect($searchResults)->take(7),
+            'searchResults' => $searchResults,
         ]);
     }
 }
