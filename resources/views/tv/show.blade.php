@@ -1,11 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="movie-info border-b border-gray-800">
+<div class="tvShow-info border-b border-gray-800">
     <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
-        @if ($movie['poster_path'])
+        @if ($tvShow['poster_path'])
             <div class="flex-none mx-auto">
-                <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $movie['poster_path'] }}" alt="poster" class="w-80 lg:w-96">  
+                <img src="{{ 'https://image.tmdb.org/t/p/w500/' . $tvShow['poster_path'] }}" alt="poster" class="w-80 lg:w-96">  
             </div>            
         @else
             <div class="flex-none mx-auto">
@@ -14,29 +14,28 @@
         @endif
 
         <div class="mx-auto mt-10 md:ml-24">
-            <h2 class="text-4xl font-semibold">{{ $movie['title'] }}</h2>
+            <h2 class="text-4xl font-semibold">{{ $tvShow['name'] }}</h2>
             <div class="flex flex-wrap items-center text-gray-400 text-sm" >
                 <svg class="fill-current text-yellow-500 w-4" viewBox="0 0 24 24"><g data-name="Layer 2"><path d="M17.56 21a1 1 0 01-.46-.11L12 18.22l-5.1 2.67a1 1 0 01-1.45-1.06l1-5.63-4.12-4a1 1 0 01-.25-1 1 1 0 01.81-.68l5.7-.83 2.51-5.13a1 1 0 011.8 0l2.54 5.12 5.7.83a1 1 0 01.81.68 1 1 0 01-.25 1l-4.12 4 1 5.63a1 1 0 01-.4 1 1 1 0 01-.62.18z" data-name="star"/></g></svg>
-                <span class="ml-1">{{ $movie['vote_average'] * 10 . '%' }}</span>
+                <span class="ml-1">{{ $tvShow['vote_average'] * 10 . '%' }}</span>
                 <span class="mx-2">|</span>
-                <span>{{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y') }}</span>
+                <span>{{ \Carbon\Carbon::parse($tvShow['first_air_date'])->format('M d, Y') }}</span>
                 <span class="mx-2">|</span>
                 <span>            
-                    @foreach ($movie['genres'] as $genre)
+                    @foreach ($tvShow['genres'] as $genre)
                         {{ $genre['name'] }} @if (!$loop->last), @endif
                     @endforeach
                 </span>
             </div>
-            <p class="text-gray-300 mt-8 break-all">{{ $movie['overview'] }}</p>
+            <p class="text-gray-300 mt-8 break-all">{{ $tvShow['overview'] }}</p>
             <div class="mt-12">
-                @if ($movie['credits']['crew'])
-                    <h4 class="text-yellow-700 font-semibold">Featured Crew</h4>
+                @if ($tvShow['credits']['crew'])
                     <div class="flex mt-4">
-                        @foreach ($movie['credits']['crew'] as $crew)
+                        @foreach ($tvShow['created_by'] as $crew)
                             @if ($loop->index < 2)
                                 <div class="mr-8">
                                     <div>{{ $crew['name'] }}</div>
-                                    <div class="text-sm text-gray-400">{{ $crew['job'] }}</div>
+                                    <div class="text-sm text-gray-400">Creator</div>
                                 </div>
                             @else
                                 @break
@@ -46,7 +45,7 @@
                 @endif
             </div>
             <div x-data="{ isOpen: false }">
-                @if (count($movie['videos']['results']) > 0)
+                @if (count($tvShow['videos']['results']) > 0)
                     <div class="mt-12">
                         <button
                             @click="isOpen = true"
@@ -74,7 +73,7 @@
                                         <div class="responsive-container overflow-hidden relative" style="padding-top: 55%">
                                             <iframe 
                                                 class="responsive-iframe absolute top-0 left-0 w-full h-full" 
-                                                src="https://www.youtube.com/embed/{{ $movie['videos']['results'][0]['key'] }}" 
+                                                src="https://www.youtube.com/embed/{{ $tvShow['videos']['results'][0]['key'] }}" 
                                                 style="border:0;" 
                                                 allow="autoplay; encrypted-media" 
                                                 allowfullscreen>
@@ -91,11 +90,11 @@
     </div>
 </div>
 
-<div class="movie-cast border-b border-gray-800">
+<div class="tvShow-cast border-b border-gray-800">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Cast</h2>
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">      
-            @foreach ($movie['credits']['cast'] as $cast)
+            @foreach ($tvShow['credits']['cast'] as $cast)
             @if ($loop->index < 5)
                 <div class="mt-8">
                     @if ($cast['profile_path'])
@@ -123,11 +122,11 @@
     </div>
 </div>
 
-<div class="movie-images" x-data="{isOpen: false, image:''}">
+<div class="tvShow-images" x-data="{isOpen: false, image:''}">
     <div class="container mx-auto px-4 py-16">
         <h2 class="text-4xl font-semibold">Images</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach ($movie['images']['backdrops'] as $image)
+            @foreach ($tvShow['images']['backdrops'] as $image)
                 @if ($loop->index < 9)
                     <div class="mt-8">
                         <a 

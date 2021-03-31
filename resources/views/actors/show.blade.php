@@ -69,17 +69,30 @@
             <div class="grid grid-cols-2 lg:grid-cols-5 gap-8">
                 @foreach ($popularMovies as $movie)
                     <div class="mt-4">
-                        @if ($movie['poster_path'])
+                        @if ($movie['poster_path'] && $movie['media_type'] == 'movie')
                             <a href="{{ route('movies.show', $movie['id']) }}">
                                 <img src="{{ 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path'] }}" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
                             </a> 
+                        @elseif ($movie['poster_path'] && $movie['media_type'] == 'tv')
+                            <a href="{{ route('tv.show', $movie['id']) }}">
+                                <img src="{{ 'https://image.tmdb.org/t/p/w150_and_h225_bestv2/' . $movie['poster_path'] }}" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
+                            </a> 
                         @else
-                        <a href="{{ route('movies.show', $movie['id']) }}">
-                            <img src="https://via.placeholder.com/190x290" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
+                            @if ($movie['media_type'] == 'movie')
+                                <a href="{{ route('movies.show', $movie['id']) }}">
+                                    <img src="https://via.placeholder.com/190x290" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
+                                </a>
+                            @elseif($movie['media_type'] == 'tv')
+                                <a href="{{ route('tv.show', $movie['id']) }}">
+                                    <img src="https://via.placeholder.com/190x290" alt="poster" class="hover:opacity-75 transition ease-in-out duration-150">
+                                </a>
+                            @endif
                         @endif
-                        
-                        <a href="{{ route('movies.show', $movie['id']) }}" class="text-sm leading-normal block text-gray-400 hover:text-white mt-1">{{ $movie['title'] }}</a>
+                        @if ($movie['media_type'] == 'movie')
+                            <a href="{{ route('movies.show', $movie['id']) }}" class="text-sm leading-normal block text-gray-400 hover:text-white mt-1">{{ $movie['title'] }}</a>
+                        @elseif($movie['media_type'] == 'tv') 
+                            <a href="{{ route('tv.show', $movie['id']) }}" class="text-sm leading-normal block text-gray-400 hover:text-white mt-1">{{ $movie['name'] }}</a>
+                        @endif 
                     </div>
                 @endforeach
             </div>

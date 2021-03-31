@@ -31,7 +31,7 @@ class TvController extends Controller
         });
 
 
-        dump($popularShows);
+        //dump($popularShows);
 
         return view('tv.index', [
             'popularShows' => $popularShows,
@@ -70,7 +70,17 @@ class TvController extends Controller
      */
     public function show($id)
     {
-        //
+        $tvShow = Http::withToken(config('services.tmdb.token'))
+            ->get('https://api.themoviedb.org/3/tv/' . $id . '?append_to_response=credits,videos,images')
+            ->json();
+
+        //&language=tr ekleyerek türkçe yapılabilir.
+
+        //dump($tvShow);
+
+        return view('tv.show', [
+            'tvShow' => $tvShow,
+        ]);
     }
 
     /**

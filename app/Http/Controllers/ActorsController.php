@@ -64,7 +64,7 @@ class ActorsController extends Controller
     public function show($id)
     {
         $actor = Http::withToken(config('services.tmdb.token'))
-            ->get('https://api.themoviedb.org/3/person/' . $id . '?append_to_response=&language=tr')
+            ->get('https://api.themoviedb.org/3/person/' . $id)
             ->json();
 
         $socialMedia = Http::withToken(config('services.tmdb.token'))
@@ -76,8 +76,8 @@ class ActorsController extends Controller
             ->json();
 
         $popularMovies = collect($credits)->get('cast');
-        $popularMovies = collect($popularMovies)->where('media_type', 'movie')->sortByDesc('popularity')->take(5);
-        //yukarda popüler olan 5 filmi çektik.
+        $popularMovies = collect($popularMovies)->sortByDesc('popularity')->take(5);
+        // popüler olan 5 filmi böyle çekeriz.. ->where('media_type', 'movie').
 
         $starringMovies = collect($credits)->get('cast');
         $starringMovies = collect($starringMovies)->sortByDesc('release_date');
@@ -88,7 +88,7 @@ class ActorsController extends Controller
         // $now = Carbon::parse(now())->format('Y');
         $age = Carbon::parse($actor['birthday'])->age;
 
-        dump($starringMovies);
+        //dump($popularMovies);
 
 
         return view('actors.show', [
